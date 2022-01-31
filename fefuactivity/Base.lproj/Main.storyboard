@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="-183" y="-25"/>
         </scene>
-        <!-- -->
+        <!--Splash-->
         <scene sceneID="9kP-vf-KjW">
             <objects>
-                <viewController title=" " id="Zyu-Rp-ZBT" customClass="ViewController" customModule="fefuactivity" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashScreen" title=" " useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zyu-Rp-ZBT" userLabel="Splash" customClass="ViewController" customModule="fefuactivity" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Lw5-BR-hl7">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

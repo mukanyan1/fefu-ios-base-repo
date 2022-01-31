@@ -13,6 +13,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInController" customModule="fefuactivity" customModuleProvider="target">
             <connections>
                 <outlet property="continueButton" destination="meW-3m-dob" id="Afz-hD-dgY"/>
+                <outlet property="loginField" destination="mX7-97-dJa" id="qeA-Sd-r6s"/>
+                <outlet property="passwordField" destination="8Fq-77-gWj" id="x6d-xp-y0h"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -51,6 +53,9 @@
                         <fontDescription key="titleFontDescription" type="system" pointSize="16"/>
                         <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </buttonConfiguration>
+                    <connections>
+                        <action selector="didTapContinueButton:" destination="-1" eventType="touchUpInside" id="MEj-ZN-2sG"/>
+                    </connections>
                 </button>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="sTa-96-8nt">
                     <rect key="frame" x="0.0" y="416" width="414" height="388"/>

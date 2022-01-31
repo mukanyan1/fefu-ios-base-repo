@@ -17,8 +17,6 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        present(TabsViewController(nibName: "TabsViewController", bundle: nil), animated: true, completion: nil)
-        
         signUpButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
         alreadyExistButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
     }
