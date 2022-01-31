@@ -2,14 +2,21 @@
 import UIKit
 
 class SignUpController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
-   
+    
+    @IBOutlet weak var loginField: SignFEFUTextField!
+    @IBOutlet weak var passwordField: SecureFEFUTextField!
+    @IBOutlet weak var passwordConfirmField: SecureFEFUTextField!
+    @IBOutlet weak var nameField: SignFEFUTextField!
     @IBOutlet weak var genderPicker: SignFEFUTextField!
     @IBOutlet weak var continueButton: ActivityFEFUButton!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    let genders = ["", "Мужской", "Женский"]
+    static private let encoder = JSONEncoder()
     
-    let genderPickerView = UIPickerView()
+    private let genders = ["Мужской", "Женский"]
+    private var genderNum = 0
+    
+    private let genderPickerView = UIPickerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +32,44 @@ class SignUpController: UIViewController, UIPickerViewDelegate, UIPickerViewData
     override func viewDidAppear(_ animated: Bool) {
     }
     
+    @IBAction func didTapContinueButton(_ sender: Any) {
+        let login = loginField.text ?? ""
+        let password = passwordField.text ?? ""
+        let passwordConfirm = passwordConfirmField.text ?? ""
+        let name = nameField.text ?? ""
+        let gender = genderNum
+        
+        if passwordConfirm != password {
+            let alert = UIAlertController(title: "Ошибка", message: "Пароли не совпадают", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ясно", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+        let body = UserRegBody(login: login, password: password, name: name, gender: gender)
+        
+        do {
+            let reqBody = try AuthService.encoder.encode(body)
+            let queue = DispatchQueue.global(qos: .utility)
+            AuthService.register(reqBody) { user in
+                queue.async {
+                    UserDefaults.standard.set(user.token, forKey: "token")
+                }
+                DispatchQueue.main.async {
+                    let vc = TabsViewController(nibName: "TabsViewController", bundle: nil)
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true, completion: nil)
+                }
+            } onError: { err in
+                DispatchQueue.main.async {
+                    self.checkApiErrors(errors: err.errors)
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+
     private func commonInit() {
         let backButton = UIBarButtonItem()
         backButton.title = ""
@@ -40,6 +85,19 @@ class SignUpController: UIViewController, UIPickerViewDelegate, UIPickerViewData
         navigationItem.prompt = ""
         
         createNotifications()
+    }
+    
+    private func checkApiErrors(errors: Dictionary<String, [String]>){
+        var alertText = ""
+        for (_, values) in errors.reversed() {
+            for e in values {
+                alertText += e + "\n"
+            }
+        }
+        
+        let alert = UIAlertController(title: "Проверьте поля", message: alertText, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Повторить попытку", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func createNotifications() {
@@ -77,6 +135,7 @@ class SignUpController: UIViewController, UIPickerViewDelegate, UIPickerViewData
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         genderPicker.text = genders[row]
+        genderNum = row
         genderPicker.resignFirstResponder()
     }
 }
